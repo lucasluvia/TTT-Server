@@ -8,6 +8,16 @@ using UnityEngine.UI;
 
 public class NetworkedServer : MonoBehaviour
 {
+    [SerializeField] ServerButtonBehaviour buttonA;
+    [SerializeField] ServerButtonBehaviour buttonB;
+    [SerializeField] ServerButtonBehaviour buttonC;
+    [SerializeField] ServerButtonBehaviour buttonD;
+    [SerializeField] ServerButtonBehaviour buttonE;
+    [SerializeField] ServerButtonBehaviour buttonF;
+    [SerializeField] ServerButtonBehaviour buttonG;
+    [SerializeField] ServerButtonBehaviour buttonH;
+    [SerializeField] ServerButtonBehaviour buttonI;
+
     int maxConnections = 1000;
     int reliableChannelID;
     int unreliableChannelID;
@@ -99,17 +109,66 @@ public class NetworkedServer : MonoBehaviour
             string clickedSquare = csv[1];
             if(id == Player1.playerID)
             {
+                AddInputToServerUI(clickedSquare, id);
                 SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + clickedSquare, id);
                 ActivePlayer.playerID = Player2.playerID;
                 SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", Player2.playerID);
             } 
             else if (id == Player2.playerID)
             {
+                AddInputToServerUI(clickedSquare, id);
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + clickedSquare, id);
                 ActivePlayer.playerID = Player1.playerID;
                 SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", Player1.playerID);
             }
             
+        }
+    }
+    
+    private void AddInputToServerUI(string clickedSquare, int id)
+    {
+        if(id == Player1.playerID)
+        {
+            if (clickedSquare == "A")
+                buttonA.PlaceX();
+            else if (clickedSquare == "B")
+                buttonB.PlaceX();
+            else if (clickedSquare == "C")
+                buttonC.PlaceX();
+            else if (clickedSquare == "D")
+                buttonD.PlaceX();
+            else if (clickedSquare == "E")
+                buttonE.PlaceX();
+            else if (clickedSquare == "F")
+                buttonF.PlaceX();
+            else if (clickedSquare == "G")
+                buttonG.PlaceX();
+            else if (clickedSquare == "H")
+                buttonH.PlaceX();
+            else if (clickedSquare == "I")
+                buttonI.PlaceX();
+        }
+        else if(id == Player2.playerID)
+        {
+
+            if (clickedSquare == "A")
+                buttonA.PlaceO();
+            else if (clickedSquare == "B")
+                buttonB.PlaceO();
+            else if (clickedSquare == "C")
+                buttonC.PlaceO();
+            else if (clickedSquare == "D")
+                buttonD.PlaceO();
+            else if (clickedSquare == "E")
+                buttonE.PlaceO();
+            else if (clickedSquare == "F")
+                buttonF.PlaceO();
+            else if (clickedSquare == "G")
+                buttonG.PlaceO();
+            else if (clickedSquare == "H")
+                buttonH.PlaceO();
+            else if (clickedSquare == "I")
+                buttonI.PlaceO();
         }
     }
 
