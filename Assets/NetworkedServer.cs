@@ -99,7 +99,7 @@ public class NetworkedServer : MonoBehaviour
             if(id == Player1.playerID)
             {
                 SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + clickedSquare, id);
-            }
+            } 
             else if (id == Player2.playerID)
             {
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + clickedSquare, id);
