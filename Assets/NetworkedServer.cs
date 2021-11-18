@@ -64,6 +64,7 @@ public class NetworkedServer : MonoBehaviour
                     Player2.setID(recConnectionID);
                     Debug.Log("Player2 connected at id: " + recConnectionID + " (playerID = " + Player2.playerID + ")");
                     ActivePlayer.setID(Player1.playerID);
+                    SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", Player1.playerID);
                 }
                 break;
             case NetworkEventType.DataEvent:
@@ -99,16 +100,21 @@ public class NetworkedServer : MonoBehaviour
             if(id == Player1.playerID)
             {
                 SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + clickedSquare, id);
+                ActivePlayer.playerID = Player2.playerID;
+                SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", Player2.playerID);
             } 
             else if (id == Player2.playerID)
             {
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + clickedSquare, id);
+                ActivePlayer.playerID = Player1.playerID;
+                SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", Player1.playerID);
             }
             
         }
     }
 
 }
+
 public class PlayerAccount
 {
     public int playerID = 0;
@@ -125,13 +131,17 @@ public class PlayerAccount
         playerID = newID;
     }
 }
+
 public static class ClientToServerSignifiers
 {
     public const int ClickedSquare = 1;
 }
+
 public static class ServerToClientSignifiers
 {
     public const int XValuePlaced = 1;
     public const int OValuePlaced = 2;
     public const int ValueNotPlaced = 3;
+    public const int ItsYourTurn = 4;
+
 }
