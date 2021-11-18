@@ -74,6 +74,7 @@ public class WatchState : MonoBehaviour
             else if (location == "I")
                 Io = true;
         }
+        count++;
     }
 
     private bool hasXWon()
@@ -138,5 +139,12 @@ public class WatchState : MonoBehaviour
         
         return false;
         
+    }
+
+    public void WipeState()
+    {
+        count = 0;
+        Ax = false; Bx = false; Cx = false; Dx = false; Ex = false; Fx = false; Gx = false; Hx = false; Ix = false;
+        Ao = false; Bo = false; Co = false; Do = false; Eo = false; Fo = false; Go = false; Ho = false; Io = false;
     }
 }

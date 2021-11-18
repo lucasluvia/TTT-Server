@@ -25,6 +25,9 @@ public class NetworkedServer : MonoBehaviour
     public bool isStalemate = false;
     bool shouldCheckState = true;
 
+    bool player1WantsReplay = false;
+    bool player2WantsReplay = false;
+
     int maxConnections = 1000;
     int reliableChannelID;
     int unreliableChannelID;
@@ -138,8 +141,17 @@ public class NetworkedServer : MonoBehaviour
         }
         if (signifier == ClientToServerSignifiers.Replay)
         {
-            //Reset both boards, player turn, player isgameover, all buttons, and watchState
-            Debug.Log("Replay Triggered");
+            if (id == Player1.playerID)
+                player1WantsReplay = true;
+            else if (id == Player2.playerID)
+                player2WantsReplay = true;
+
+            if(player1WantsReplay && player2WantsReplay)
+            {
+                SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player1.playerID);
+                SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player2.playerID);
+                WipeBoard();
+            }
         }
     }
     
@@ -212,6 +224,31 @@ public class NetworkedServer : MonoBehaviour
         }
     }
 
+    private void WipeBoard()
+    {
+        // Wipe Buttons
+        buttonA.WipePlacement();
+        buttonB.WipePlacement();
+        buttonC.WipePlacement();
+        buttonD.WipePlacement();
+        buttonE.WipePlacement();
+        buttonF.WipePlacement();
+        buttonG.WipePlacement();
+        buttonH.WipePlacement();
+        buttonI.WipePlacement();
+
+        // Wipe State
+        watchState.WipeState();
+
+        // Wipe Variables
+        winX = false;
+        winO = false;
+        isStalemate = false;
+        shouldCheckState = true;
+        player1WantsReplay = false;
+        player2WantsReplay = false;
+    }
+
 }
 
 public class PlayerAccount
@@ -246,5 +283,6 @@ public static class ServerToClientSignifiers
     public const int YouWon = 5;
     public const int YouLost = 6;
     public const int Tie = 7;
+    public const int WipeBoard = 8;
 
 }

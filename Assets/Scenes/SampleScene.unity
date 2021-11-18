@@ -254,6 +254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 425555108}
   - component: {fileID: 425555107}
+  - component: {fileID: 425555109}
   m_Layer: 0
   m_Name: Server
   m_TagString: Untagged
@@ -282,6 +283,10 @@ MonoBehaviour:
   buttonG: {fileID: 1357695706}
   buttonH: {fileID: 2067433818}
   buttonI: {fileID: 1144835411}
+  watchState: {fileID: 425555109}
+  winX: 0
+  winO: 0
+  isStalemate: 0
 --- !u!4 &425555108
 Transform:
   m_ObjectHideFlags: 0
@@ -296,6 +301,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &425555109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425555106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae33306949c9e60498ca82d43a076b4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  server: {fileID: 425555107}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

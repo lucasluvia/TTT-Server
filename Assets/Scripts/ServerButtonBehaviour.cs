@@ -27,4 +27,11 @@ public class ServerButtonBehaviour : MonoBehaviour
         textO.gameObject.SetActive(true);
         isOccupied = true;
     }
+
+    public void WipePlacement()
+    {
+        textX.gameObject.SetActive(false);
+        textO.gameObject.SetActive(false);
+        isOccupied = false;
+    }
 }
