@@ -18,6 +18,13 @@ public class NetworkedServer : MonoBehaviour
     [SerializeField] ServerButtonBehaviour buttonH;
     [SerializeField] ServerButtonBehaviour buttonI;
 
+    [SerializeField] WatchState watchState;
+
+    public bool winX = false;
+    public bool winO = false;
+    public bool isStalemate = false;
+    bool shouldCheckState = true;
+
     int maxConnections = 1000;
     int reliableChannelID;
     int unreliableChannelID;
@@ -47,7 +54,9 @@ public class NetworkedServer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(shouldCheckState)
+            CheckState();
+        
         int recHostID;
         int recConnectionID;
         int recChannelID;
@@ -110,7 +119,9 @@ public class NetworkedServer : MonoBehaviour
             if(id == Player1.playerID)
             {
                 AddInputToServerUI(clickedSquare, id);
-                SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + clickedSquare, id);
+                SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + clickedSquare, id); 
+                SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + clickedSquare, Player2.playerID);
+                watchState.RecieveInput(clickedSquare, id);
                 ActivePlayer.playerID = Player2.playerID;
                 SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", Player2.playerID);
             } 
@@ -118,10 +129,17 @@ public class NetworkedServer : MonoBehaviour
             {
                 AddInputToServerUI(clickedSquare, id);
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + clickedSquare, id);
+                SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + clickedSquare, Player1.playerID);
+                watchState.RecieveInput(clickedSquare, id);
                 ActivePlayer.playerID = Player1.playerID;
                 SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", Player1.playerID);
             }
             
+        }
+        if (signifier == ClientToServerSignifiers.Replay)
+        {
+            //Reset both boards, player turn, player isgameover, all buttons, and watchState
+            Debug.Log("Replay Triggered");
         }
     }
     
@@ -172,6 +190,28 @@ public class NetworkedServer : MonoBehaviour
         }
     }
 
+    private void CheckState()
+    {
+        if(winX)
+        {
+            SendMessageToClient(ServerToClientSignifiers.YouWon + ",You Won! Press R to play again", Player1.playerID);
+            SendMessageToClient(ServerToClientSignifiers.YouLost + ",You Lost. press R to play again", Player2.playerID);
+            shouldCheckState = false;
+        }
+        else if(winO)
+        {
+            SendMessageToClient(ServerToClientSignifiers.YouLost + ",You Lost. press R to play again", Player1.playerID);
+            SendMessageToClient(ServerToClientSignifiers.YouWon + ",You Won! Press R to play again", Player2.playerID);
+            shouldCheckState = false;
+        }
+        else if(isStalemate)
+        {
+            SendMessageToClient(ServerToClientSignifiers.Tie + ",Tie Game. press R to play again", Player1.playerID);
+            SendMessageToClient(ServerToClientSignifiers.Tie + ",Tie Game. press R to play again", Player2.playerID);
+            shouldCheckState = false;
+        }
+    }
+
 }
 
 public class PlayerAccount
@@ -194,6 +234,7 @@ public class PlayerAccount
 public static class ClientToServerSignifiers
 {
     public const int ClickedSquare = 1;
+    public const int Replay = 2;
 }
 
 public static class ServerToClientSignifiers
@@ -202,5 +243,8 @@ public static class ServerToClientSignifiers
     public const int OValuePlaced = 2;
     public const int ValueNotPlaced = 3;
     public const int ItsYourTurn = 4;
+    public const int YouWon = 5;
+    public const int YouLost = 6;
+    public const int Tie = 7;
 
 }
