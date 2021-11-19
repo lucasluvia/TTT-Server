@@ -11,23 +11,26 @@ public class WatchState : MonoBehaviour
     bool Ax = false; bool Bx = false; bool Cx = false; bool Dx = false; bool Ex = false; bool Fx = false; bool Gx = false; bool Hx = false; bool Ix = false;
     bool Ao = false; bool Bo = false; bool Co = false; bool Do = false; bool Eo = false; bool Fo = false; bool Go = false; bool Ho = false; bool Io = false;
 
-    public Queue<string> OOP = new Queue<string>();
+    public Queue<string> OOP = new Queue<string>(); // Order Of Play
 
     void Update()
     {
-        if(hasXWon())
+        if(hasXWon() && !server.winX)
         {
             server.winX = true;
+            server.doReplay = true;
         }
-        else if(hasOWon())
+        else if(hasOWon() && !server.winO)
         {
             server.winO = true;
+            server.doReplay = true;
         }
         else
         {
-            if (count == 9)
+            if (count == 9 && !server.isStalemate)
             {
                 server.isStalemate = true;
+                server.Replay();
             }
         }
     }

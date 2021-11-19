@@ -24,9 +24,10 @@ public class NetworkedServer : MonoBehaviour
     public bool winO = false;
     public bool isStalemate = false;
     bool shouldCheckState = true;
+    public bool doReplay = false;
 
-    bool player1WantsReplay = false;
-    bool player2WantsReplay = false;
+    bool player1WantsRestart = false;
+    bool player2WantsRestart = false;
 
     int maxConnections = 1000;
     int reliableChannelID;
@@ -39,7 +40,7 @@ public class NetworkedServer : MonoBehaviour
     PlayerAccount Player2 = new PlayerAccount(0);
     PlayerAccount ActivePlayer = new PlayerAccount(0);
 
-    private IEnumerator waitingInReplay = null;
+    private IEnumerator waitingInRestart = null;
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +61,13 @@ public class NetworkedServer : MonoBehaviour
     {
         if(shouldCheckState)
             CheckState();
-        
+        if (doReplay)
+        {
+            doReplay = false;
+            Replay();
+        }
+
+
         int recHostID;
         int recConnectionID;
         int recChannelID;
@@ -140,19 +147,19 @@ public class NetworkedServer : MonoBehaviour
             }
             
         }
-        if (signifier == ClientToServerSignifiers.Replay)
+        if (signifier == ClientToServerSignifiers.Restart)
         {
             if (id == Player1.playerID)
-                player1WantsReplay = true;
+                player1WantsRestart = true;
             else if (id == Player2.playerID)
-                player2WantsReplay = true;
+                player2WantsRestart = true;
 
-            if(player1WantsReplay && player2WantsReplay)
+            if(player1WantsRestart && player2WantsRestart)
             {
-                //SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player1.playerID);
-                //SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player2.playerID);
-                Replay();
-                //WipeBoard();
+                SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player1.playerID);
+                SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player2.playerID);
+                WipeBoard();
+                
             }
         }
     }
@@ -229,15 +236,7 @@ public class NetworkedServer : MonoBehaviour
     private void WipeBoard()
     {
         // Wipe Buttons
-        buttonA.WipePlacement();
-        buttonB.WipePlacement();
-        buttonC.WipePlacement();
-        buttonD.WipePlacement();
-        buttonE.WipePlacement();
-        buttonF.WipePlacement();
-        buttonG.WipePlacement();
-        buttonH.WipePlacement();
-        buttonI.WipePlacement();
+        WipeButtons();
 
         // Wipe State
         watchState.WipeState();
@@ -247,13 +246,11 @@ public class NetworkedServer : MonoBehaviour
         winO = false;
         isStalemate = false;
         shouldCheckState = true;
-        player1WantsReplay = false;
-        player2WantsReplay = false;
+        player1WantsRestart = false;
+        player2WantsRestart = false;
     }
-
-    private void Replay()
+    private void WipeButtons()
     {
-        // Wipe Buttons
         buttonA.WipePlacement();
         buttonB.WipePlacement();
         buttonC.WipePlacement();
@@ -263,13 +260,19 @@ public class NetworkedServer : MonoBehaviour
         buttonG.WipePlacement();
         buttonH.WipePlacement();
         buttonI.WipePlacement();
+    }
 
-        waitingInReplay = WaitingInReplay(1.0f);
-        StartCoroutine(waitingInReplay);
+    public void Replay()
+    {
+        WipeButtons();
+        SendMessageToClient(ServerToClientSignifiers.WatchReplay + "", Player1.playerID);
+        SendMessageToClient(ServerToClientSignifiers.WatchReplay + "", Player2.playerID);
+        waitingInRestart = WaitingInRestart(1.0f);
+        StartCoroutine(waitingInRestart);
     }
 
 
-    IEnumerator WaitingInReplay(float TimeToWait)
+    IEnumerator WaitingInRestart(float TimeToWait)
     {
         bool TurnOdd = true;
         string placedLocation;
@@ -280,7 +283,7 @@ public class NetworkedServer : MonoBehaviour
             if (TurnOdd)
             {
                 if (placedLocation == "A")
-                    buttonA.PlaceX();
+                    buttonA.PlaceX(); 
                 else if (placedLocation == "B")
                     buttonB.PlaceX();
                 else if (placedLocation == "C")
@@ -297,6 +300,8 @@ public class NetworkedServer : MonoBehaviour
                     buttonH.PlaceX();
                 else if (placedLocation == "I")
                     buttonI.PlaceX();
+                SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + placedLocation, Player1.playerID);
+                SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + placedLocation, Player2.playerID);
             }
             else if (!TurnOdd)
             {
@@ -318,11 +323,17 @@ public class NetworkedServer : MonoBehaviour
                     buttonH.PlaceO();
                 else if (placedLocation == "I")
                     buttonI.PlaceO();
+                SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + placedLocation, Player1.playerID);
+                SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + placedLocation, Player2.playerID);
+
             }
             TurnOdd = !TurnOdd;
 
         }
+        SendMessageToClient(ServerToClientSignifiers.WantToRestart + "", Player1.playerID);
+        SendMessageToClient(ServerToClientSignifiers.WantToRestart + "", Player2.playerID);
     }
+    
 
 }
 
@@ -347,17 +358,19 @@ public static class ClientToServerSignifiers
 {
     public const int ClickedSquare = 1;
     public const int Replay = 2;
+    public const int Restart = 3;
 }
 
 public static class ServerToClientSignifiers
 {
     public const int XValuePlaced = 1;
     public const int OValuePlaced = 2;
-    public const int ValueNotPlaced = 3;
-    public const int ItsYourTurn = 4;
-    public const int YouWon = 5;
-    public const int YouLost = 6;
-    public const int Tie = 7;
-    public const int WipeBoard = 8;
+    public const int ItsYourTurn = 3;
+    public const int YouWon = 4;
+    public const int YouLost = 5;
+    public const int Tie = 6;
+    public const int WipeBoard = 7;
+    public const int WatchReplay = 8;
+    public const int WantToRestart = 9;
 
 }
