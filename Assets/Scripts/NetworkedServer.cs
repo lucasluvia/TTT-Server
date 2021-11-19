@@ -39,6 +39,7 @@ public class NetworkedServer : MonoBehaviour
     LinkedList<PlayerAccount> playerAccounts;
     PlayerAccount Player1 = new PlayerAccount(0);
     PlayerAccount Player2 = new PlayerAccount(0);
+    PlayerAccount Spectator = new PlayerAccount(0);
     PlayerAccount ActivePlayer = new PlayerAccount(0);
 
     private IEnumerator waitingInReplay = null;
@@ -97,6 +98,11 @@ public class NetworkedServer : MonoBehaviour
                     ActivePlayer.setID(Player1.playerID);
                     SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", Player1.playerID);
                 }
+                else
+                {
+                    Spectator.setID(recConnectionID);
+                    SendMessageToClient(ServerToClientSignifiers.Spectating + ",You are a spectator", Spectator.playerID);
+                }
                 break;
             case NetworkEventType.DataEvent:
                 string msg = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
@@ -133,6 +139,7 @@ public class NetworkedServer : MonoBehaviour
                 AddInputToServerUI(clickedSquare, id);
                 SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + clickedSquare, id); 
                 SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + clickedSquare, Player2.playerID);
+                SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + clickedSquare, Spectator.playerID);
                 watchState.RecieveInput(clickedSquare, id);
                 ActivePlayer.playerID = Player2.playerID;
                 SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", Player2.playerID);
@@ -142,6 +149,7 @@ public class NetworkedServer : MonoBehaviour
                 AddInputToServerUI(clickedSquare, id);
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + clickedSquare, id);
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + clickedSquare, Player1.playerID);
+                SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + clickedSquare, Spectator.playerID);
                 watchState.RecieveInput(clickedSquare, id);
                 ActivePlayer.playerID = Player1.playerID;
                 SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", Player1.playerID);
@@ -159,6 +167,7 @@ public class NetworkedServer : MonoBehaviour
             {
                 SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player1.playerID);
                 SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player2.playerID);
+                SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Spectator.playerID);
                 SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", ActivePlayer.playerID);
                 WipeBoard();
                 
@@ -274,6 +283,7 @@ public class NetworkedServer : MonoBehaviour
         WipeButtons();
         SendMessageToClient(ServerToClientSignifiers.WatchReplay + "", Player1.playerID);
         SendMessageToClient(ServerToClientSignifiers.WatchReplay + "", Player2.playerID);
+        SendMessageToClient(ServerToClientSignifiers.WatchReplay + "", Spectator.playerID);
         waitingInReplay = WaitingInReplay(1.0f);
         StartCoroutine(waitingInReplay);
     }
@@ -308,6 +318,7 @@ public class NetworkedServer : MonoBehaviour
                     buttonI.PlaceX();
                 SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + placedLocation, Player1.playerID);
                 SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + placedLocation, Player2.playerID);
+                SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + placedLocation, Spectator.playerID);
             }
             else if (!TurnOdd)
             {
@@ -331,6 +342,7 @@ public class NetworkedServer : MonoBehaviour
                     buttonI.PlaceO();
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + placedLocation, Player1.playerID);
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + placedLocation, Player2.playerID);
+                SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + placedLocation, Spectator.playerID);
 
             }
             TurnOdd = !TurnOdd;
@@ -380,4 +392,5 @@ public static class ServerToClientSignifiers
     public const int WatchReplay = 8;
     public const int WantToRestart = 9;
     public const int ReceiveText = 10;
+    public const int Spectating = 11;
 }
