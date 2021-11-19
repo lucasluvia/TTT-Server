@@ -11,6 +11,8 @@ public class WatchState : MonoBehaviour
     bool Ax = false; bool Bx = false; bool Cx = false; bool Dx = false; bool Ex = false; bool Fx = false; bool Gx = false; bool Hx = false; bool Ix = false;
     bool Ao = false; bool Bo = false; bool Co = false; bool Do = false; bool Eo = false; bool Fo = false; bool Go = false; bool Ho = false; bool Io = false;
 
+    public Queue<string> OOP = new Queue<string>();
+
     void Update()
     {
         if(hasXWon())
@@ -75,6 +77,7 @@ public class WatchState : MonoBehaviour
                 Io = true;
         }
         count++;
+        OOP.Enqueue(location);
     }
 
     private bool hasXWon()
@@ -147,4 +150,5 @@ public class WatchState : MonoBehaviour
         Ax = false; Bx = false; Cx = false; Dx = false; Ex = false; Fx = false; Gx = false; Hx = false; Ix = false;
         Ao = false; Bo = false; Co = false; Do = false; Eo = false; Fo = false; Go = false; Ho = false; Io = false;
     }
+
 }

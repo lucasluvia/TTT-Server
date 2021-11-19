@@ -39,6 +39,7 @@ public class NetworkedServer : MonoBehaviour
     PlayerAccount Player2 = new PlayerAccount(0);
     PlayerAccount ActivePlayer = new PlayerAccount(0);
 
+    private IEnumerator waitingInReplay = null;
 
     // Start is called before the first frame update
     void Start()
@@ -148,9 +149,10 @@ public class NetworkedServer : MonoBehaviour
 
             if(player1WantsReplay && player2WantsReplay)
             {
-                SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player1.playerID);
-                SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player2.playerID);
-                WipeBoard();
+                //SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player1.playerID);
+                //SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player2.playerID);
+                Replay();
+                //WipeBoard();
             }
         }
     }
@@ -247,6 +249,79 @@ public class NetworkedServer : MonoBehaviour
         shouldCheckState = true;
         player1WantsReplay = false;
         player2WantsReplay = false;
+    }
+
+    private void Replay()
+    {
+        // Wipe Buttons
+        buttonA.WipePlacement();
+        buttonB.WipePlacement();
+        buttonC.WipePlacement();
+        buttonD.WipePlacement();
+        buttonE.WipePlacement();
+        buttonF.WipePlacement();
+        buttonG.WipePlacement();
+        buttonH.WipePlacement();
+        buttonI.WipePlacement();
+
+        waitingInReplay = WaitingInReplay(1.0f);
+        StartCoroutine(waitingInReplay);
+    }
+
+
+    IEnumerator WaitingInReplay(float TimeToWait)
+    {
+        bool TurnOdd = true;
+        string placedLocation;
+        while (watchState.OOP.Count > 0)
+        {
+            yield return new WaitForSeconds(TimeToWait);
+            placedLocation = watchState.OOP.Dequeue();
+            if (TurnOdd)
+            {
+                if (placedLocation == "A")
+                    buttonA.PlaceX();
+                else if (placedLocation == "B")
+                    buttonB.PlaceX();
+                else if (placedLocation == "C")
+                    buttonC.PlaceX();
+                else if (placedLocation == "D")
+                    buttonD.PlaceX();
+                else if (placedLocation == "E")
+                    buttonE.PlaceX();
+                else if (placedLocation == "F")
+                    buttonF.PlaceX();
+                else if (placedLocation == "G")
+                    buttonG.PlaceX();
+                else if (placedLocation == "H")
+                    buttonH.PlaceX();
+                else if (placedLocation == "I")
+                    buttonI.PlaceX();
+            }
+            else if (!TurnOdd)
+            {
+                if (placedLocation == "A")
+                    buttonA.PlaceO();
+                else if (placedLocation == "B")
+                    buttonB.PlaceO();
+                else if (placedLocation == "C")
+                    buttonC.PlaceO();
+                else if (placedLocation == "D")
+                    buttonD.PlaceO();
+                else if (placedLocation == "E")
+                    buttonE.PlaceO();
+                else if (placedLocation == "F")
+                    buttonF.PlaceO();
+                else if (placedLocation == "G")
+                    buttonG.PlaceO();
+                else if (placedLocation == "H")
+                    buttonH.PlaceO();
+                else if (placedLocation == "I")
+                    buttonI.PlaceO();
+            }
+            TurnOdd = !TurnOdd;
+
+        }
     }
 
 }
