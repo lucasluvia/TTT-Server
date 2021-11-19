@@ -7,6 +7,7 @@ public class WatchState : MonoBehaviour
     [SerializeField] private NetworkedServer server;
 
     int count = 0;
+    bool hasWon = false;
     
     bool Ax = false; bool Bx = false; bool Cx = false; bool Dx = false; bool Ex = false; bool Fx = false; bool Gx = false; bool Hx = false; bool Ix = false;
     bool Ao = false; bool Bo = false; bool Co = false; bool Do = false; bool Eo = false; bool Fo = false; bool Go = false; bool Ho = false; bool Io = false;
@@ -15,20 +16,24 @@ public class WatchState : MonoBehaviour
 
     void Update()
     {
-        if(hasXWon() && !server.winX)
+
+        if (hasXWon() && !hasWon)
         {
+            hasWon = true;
             server.winX = true;
             server.doReplay = true;
         }
-        else if(hasOWon() && !server.winO)
+        else if (hasOWon() && !hasWon)
         {
+            hasWon = true;
             server.winO = true;
             server.doReplay = true;
         }
         else
         {
-            if (count == 9 && !server.isStalemate)
+            if (count == 9 && !hasWon)
             {
+                hasWon = true;
                 server.isStalemate = true;
                 server.Replay();
             }
@@ -150,6 +155,7 @@ public class WatchState : MonoBehaviour
     public void WipeState()
     {
         count = 0;
+        hasWon = false;
         Ax = false; Bx = false; Cx = false; Dx = false; Ex = false; Fx = false; Gx = false; Hx = false; Ix = false;
         Ao = false; Bo = false; Co = false; Do = false; Eo = false; Fo = false; Go = false; Ho = false; Io = false;
     }

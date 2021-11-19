@@ -28,6 +28,7 @@ public class NetworkedServer : MonoBehaviour
 
     bool player1WantsRestart = false;
     bool player2WantsRestart = false;
+    bool TurnOdd = true;
 
     int maxConnections = 1000;
     int reliableChannelID;
@@ -40,7 +41,7 @@ public class NetworkedServer : MonoBehaviour
     PlayerAccount Player2 = new PlayerAccount(0);
     PlayerAccount ActivePlayer = new PlayerAccount(0);
 
-    private IEnumerator waitingInRestart = null;
+    private IEnumerator waitingInReplay = null;
 
     // Start is called before the first frame update
     void Start()
@@ -158,9 +159,15 @@ public class NetworkedServer : MonoBehaviour
             {
                 SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player1.playerID);
                 SendMessageToClient(ServerToClientSignifiers.WipeBoard + ",Wipe your board!", Player2.playerID);
+                SendMessageToClient(ServerToClientSignifiers.ItsYourTurn + ",It's your turn", ActivePlayer.playerID);
                 WipeBoard();
                 
             }
+        }
+        if (signifier == ClientToServerSignifiers.SendText)
+        {
+            SendMessageToClient(ServerToClientSignifiers.ReceiveText + "," + csv[1].ToString(), Player1.playerID);
+            SendMessageToClient(ServerToClientSignifiers.ReceiveText + "," + csv[1].ToString(), Player2.playerID);
         }
     }
     
@@ -267,14 +274,13 @@ public class NetworkedServer : MonoBehaviour
         WipeButtons();
         SendMessageToClient(ServerToClientSignifiers.WatchReplay + "", Player1.playerID);
         SendMessageToClient(ServerToClientSignifiers.WatchReplay + "", Player2.playerID);
-        waitingInRestart = WaitingInRestart(1.0f);
-        StartCoroutine(waitingInRestart);
+        waitingInReplay = WaitingInReplay(1.0f);
+        StartCoroutine(waitingInReplay);
     }
 
 
-    IEnumerator WaitingInRestart(float TimeToWait)
+    IEnumerator WaitingInReplay(float TimeToWait)
     {
-        bool TurnOdd = true;
         string placedLocation;
         while (watchState.OOP.Count > 0)
         {
@@ -359,6 +365,7 @@ public static class ClientToServerSignifiers
     public const int ClickedSquare = 1;
     public const int Replay = 2;
     public const int Restart = 3;
+    public const int SendText = 4;
 }
 
 public static class ServerToClientSignifiers
@@ -372,5 +379,5 @@ public static class ServerToClientSignifiers
     public const int WipeBoard = 7;
     public const int WatchReplay = 8;
     public const int WantToRestart = 9;
-
+    public const int ReceiveText = 10;
 }
