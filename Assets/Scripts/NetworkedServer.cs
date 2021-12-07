@@ -8,15 +8,15 @@ using UnityEngine.UI;
 
 public class NetworkedServer : MonoBehaviour
 {
-    [SerializeField] ServerButtonBehaviour buttonA;
-    [SerializeField] ServerButtonBehaviour buttonB;
-    [SerializeField] ServerButtonBehaviour buttonC;
-    [SerializeField] ServerButtonBehaviour buttonD;
-    [SerializeField] ServerButtonBehaviour buttonE;
-    [SerializeField] ServerButtonBehaviour buttonF;
-    [SerializeField] ServerButtonBehaviour buttonG;
-    [SerializeField] ServerButtonBehaviour buttonH;
-    [SerializeField] ServerButtonBehaviour buttonI;
+    [SerializeField] ServerButtonBehaviour buttonTL;
+    [SerializeField] ServerButtonBehaviour buttonTM;
+    [SerializeField] ServerButtonBehaviour buttonTR;
+    [SerializeField] ServerButtonBehaviour buttonCL;
+    [SerializeField] ServerButtonBehaviour buttonCM;
+    [SerializeField] ServerButtonBehaviour buttonCR;
+    [SerializeField] ServerButtonBehaviour buttonBL;
+    [SerializeField] ServerButtonBehaviour buttonBM;
+    [SerializeField] ServerButtonBehaviour buttonBR;
 
     [SerializeField] WatchState watchState;
 
@@ -184,46 +184,11 @@ public class NetworkedServer : MonoBehaviour
     {
         if(id == Player1.playerID)
         {
-            if (clickedSquare == "A")
-                buttonA.PlaceX();
-            else if (clickedSquare == "B")
-                buttonB.PlaceX();
-            else if (clickedSquare == "C")
-                buttonC.PlaceX();
-            else if (clickedSquare == "D")
-                buttonD.PlaceX();
-            else if (clickedSquare == "E")
-                buttonE.PlaceX();
-            else if (clickedSquare == "F")
-                buttonF.PlaceX();
-            else if (clickedSquare == "G")
-                buttonG.PlaceX();
-            else if (clickedSquare == "H")
-                buttonH.PlaceX();
-            else if (clickedSquare == "I")
-                buttonI.PlaceX();
+            inPositionPlaceX(clickedSquare);
         }
         else if(id == Player2.playerID)
         {
-
-            if (clickedSquare == "A")
-                buttonA.PlaceO();
-            else if (clickedSquare == "B")
-                buttonB.PlaceO();
-            else if (clickedSquare == "C")
-                buttonC.PlaceO();
-            else if (clickedSquare == "D")
-                buttonD.PlaceO();
-            else if (clickedSquare == "E")
-                buttonE.PlaceO();
-            else if (clickedSquare == "F")
-                buttonF.PlaceO();
-            else if (clickedSquare == "G")
-                buttonG.PlaceO();
-            else if (clickedSquare == "H")
-                buttonH.PlaceO();
-            else if (clickedSquare == "I")
-                buttonI.PlaceO();
+            inPositionPlaceO(clickedSquare);
         }
     }
 
@@ -267,15 +232,15 @@ public class NetworkedServer : MonoBehaviour
     }
     private void WipeButtons()
     {
-        buttonA.WipePlacement();
-        buttonB.WipePlacement();
-        buttonC.WipePlacement();
-        buttonD.WipePlacement();
-        buttonE.WipePlacement();
-        buttonF.WipePlacement();
-        buttonG.WipePlacement();
-        buttonH.WipePlacement();
-        buttonI.WipePlacement();
+        buttonTL.WipePlacement();
+        buttonTM.WipePlacement();
+        buttonTR.WipePlacement();
+        buttonCL.WipePlacement();
+        buttonCM.WipePlacement();
+        buttonCR.WipePlacement();
+        buttonBL.WipePlacement();
+        buttonBM.WipePlacement();
+        buttonBR.WipePlacement();
     }
 
     public void Replay()
@@ -298,48 +263,16 @@ public class NetworkedServer : MonoBehaviour
             placedLocation = watchState.OOP.Dequeue();
             if (TurnOdd)
             {
-                if (placedLocation == "A")
-                    buttonA.PlaceX(); 
-                else if (placedLocation == "B")
-                    buttonB.PlaceX();
-                else if (placedLocation == "C")
-                    buttonC.PlaceX();
-                else if (placedLocation == "D")
-                    buttonD.PlaceX();
-                else if (placedLocation == "E")
-                    buttonE.PlaceX();
-                else if (placedLocation == "F")
-                    buttonF.PlaceX();
-                else if (placedLocation == "G")
-                    buttonG.PlaceX();
-                else if (placedLocation == "H")
-                    buttonH.PlaceX();
-                else if (placedLocation == "I")
-                    buttonI.PlaceX();
+                inPositionPlaceX(placedLocation);
+
                 SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + placedLocation, Player1.playerID);
                 SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + placedLocation, Player2.playerID);
                 SendMessageToClient(ServerToClientSignifiers.XValuePlaced + ",in square ," + placedLocation, Spectator.playerID);
             }
             else if (!TurnOdd)
             {
-                if (placedLocation == "A")
-                    buttonA.PlaceO();
-                else if (placedLocation == "B")
-                    buttonB.PlaceO();
-                else if (placedLocation == "C")
-                    buttonC.PlaceO();
-                else if (placedLocation == "D")
-                    buttonD.PlaceO();
-                else if (placedLocation == "E")
-                    buttonE.PlaceO();
-                else if (placedLocation == "F")
-                    buttonF.PlaceO();
-                else if (placedLocation == "G")
-                    buttonG.PlaceO();
-                else if (placedLocation == "H")
-                    buttonH.PlaceO();
-                else if (placedLocation == "I")
-                    buttonI.PlaceO();
+                inPositionPlaceO(placedLocation);
+
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + placedLocation, Player1.playerID);
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + placedLocation, Player2.playerID);
                 SendMessageToClient(ServerToClientSignifiers.OValuePlaced + ",in square ," + placedLocation, Spectator.playerID);
@@ -351,7 +284,51 @@ public class NetworkedServer : MonoBehaviour
         SendMessageToClient(ServerToClientSignifiers.WantToRestart + "", Player1.playerID);
         SendMessageToClient(ServerToClientSignifiers.WantToRestart + "", Player2.playerID);
     }
-    
+
+
+    private void inPositionPlaceX(string location)
+    {
+        if (location == "TL")
+            buttonTL.PlaceX();
+        else if (location == "TM")
+            buttonTM.PlaceX();
+        else if (location == "TR")
+            buttonTR.PlaceX();
+        else if (location == "CL")
+            buttonCL.PlaceX();
+        else if (location == "CM")
+            buttonCM.PlaceX();
+        else if (location == "CR")
+            buttonCR.PlaceX();
+        else if (location == "BL")
+            buttonBL.PlaceX();
+        else if (location == "BM")
+            buttonBM.PlaceX();
+        else if (location == "BR")
+            buttonBR.PlaceX();
+    }
+
+    private void inPositionPlaceO(string clickedSquare)
+    {
+        if (clickedSquare == "TL")
+            buttonTL.PlaceO();
+        else if (clickedSquare == "TM")
+            buttonTM.PlaceO();
+        else if (clickedSquare == "TR")
+            buttonTR.PlaceO();
+        else if (clickedSquare == "CL")
+            buttonCL.PlaceO();
+        else if (clickedSquare == "CM")
+            buttonCM.PlaceO();
+        else if (clickedSquare == "CR")
+            buttonCR.PlaceO();
+        else if (clickedSquare == "BL")
+            buttonBL.PlaceO();
+        else if (clickedSquare == "BM")
+            buttonBM.PlaceO();
+        else if (clickedSquare == "BR")
+            buttonBR.PlaceO();
+    }
 
 }
 

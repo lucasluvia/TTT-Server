@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6782236462464315749, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Name
-      value: D
+      value: CL
       objectReference: {fileID: 0}
     - target: {fileID: 6782236462464315754, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Pivot.x
@@ -224,7 +224,7 @@ PrefabInstance:
       objectReference: {fileID: 425555107}
     - target: {fileID: 7686996949362408578, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: buttonID
-      value: 68
+      value: CL
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
@@ -274,19 +274,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47d9e3bc60e18c944938b0850318d5ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonA: {fileID: 1347998974}
-  buttonB: {fileID: 1971717673}
-  buttonC: {fileID: 1420086219}
-  buttonD: {fileID: 127542721}
-  buttonE: {fileID: 1361550189}
-  buttonF: {fileID: 1396389533}
-  buttonG: {fileID: 1357695706}
-  buttonH: {fileID: 2067433818}
-  buttonI: {fileID: 1144835411}
+  buttonTL: {fileID: 1347998974}
+  buttonTM: {fileID: 1971717673}
+  buttonTR: {fileID: 1420086219}
+  buttonCL: {fileID: 127542721}
+  buttonCM: {fileID: 1361550189}
+  buttonCR: {fileID: 1396389533}
+  buttonBL: {fileID: 1357695706}
+  buttonBM: {fileID: 2067433818}
+  buttonBR: {fileID: 1144835411}
   watchState: {fileID: 425555109}
   winX: 0
   winO: 0
   isStalemate: 0
+  doReplay: 0
 --- !u!4 &425555108
 Transform:
   m_ObjectHideFlags: 0
@@ -516,7 +517,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6782236462464315749, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Name
-      value: I
+      value: BR
       objectReference: {fileID: 0}
     - target: {fileID: 6782236462464315754, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Pivot.x
@@ -608,7 +609,7 @@ PrefabInstance:
       objectReference: {fileID: 425555107}
     - target: {fileID: 7686996949362408578, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: buttonID
-      value: 73
+      value: BR
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
@@ -637,7 +638,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6782236462464315749, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Name
-      value: A
+      value: TL
       objectReference: {fileID: 0}
     - target: {fileID: 6782236462464315754, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Pivot.x
@@ -727,6 +728,10 @@ PrefabInstance:
       propertyPath: server
       value: 
       objectReference: {fileID: 425555107}
+    - target: {fileID: 7686996949362408578, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
+      propertyPath: buttonID
+      value: TL
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
 --- !u!224 &1347998973 stripped
@@ -754,7 +759,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6782236462464315749, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Name
-      value: G
+      value: BL
       objectReference: {fileID: 0}
     - target: {fileID: 6782236462464315754, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Pivot.x
@@ -846,7 +851,7 @@ PrefabInstance:
       objectReference: {fileID: 425555107}
     - target: {fileID: 7686996949362408578, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: buttonID
-      value: 71
+      value: BL
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
@@ -875,7 +880,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6782236462464315749, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Name
-      value: E
+      value: CM
       objectReference: {fileID: 0}
     - target: {fileID: 6782236462464315754, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Pivot.x
@@ -967,7 +972,7 @@ PrefabInstance:
       objectReference: {fileID: 425555107}
     - target: {fileID: 7686996949362408578, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: buttonID
-      value: 69
+      value: CM
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
@@ -996,7 +1001,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6782236462464315749, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Name
-      value: F
+      value: CR
       objectReference: {fileID: 0}
     - target: {fileID: 6782236462464315754, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Pivot.x
@@ -1088,7 +1093,7 @@ PrefabInstance:
       objectReference: {fileID: 425555107}
     - target: {fileID: 7686996949362408578, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: buttonID
-      value: 70
+      value: CR
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
@@ -1117,7 +1122,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6782236462464315749, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Name
-      value: C
+      value: TR
       objectReference: {fileID: 0}
     - target: {fileID: 6782236462464315754, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Pivot.x
@@ -1209,7 +1214,7 @@ PrefabInstance:
       objectReference: {fileID: 425555107}
     - target: {fileID: 7686996949362408578, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: buttonID
-      value: 67
+      value: TR
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
@@ -1338,7 +1343,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6782236462464315749, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Name
-      value: B
+      value: TM
       objectReference: {fileID: 0}
     - target: {fileID: 6782236462464315754, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Pivot.x
@@ -1430,7 +1435,7 @@ PrefabInstance:
       objectReference: {fileID: 425555107}
     - target: {fileID: 7686996949362408578, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: buttonID
-      value: 66
+      value: TM
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
@@ -1459,7 +1464,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6782236462464315749, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Name
-      value: H
+      value: BM
       objectReference: {fileID: 0}
     - target: {fileID: 6782236462464315754, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: m_Pivot.x
@@ -1551,7 +1556,7 @@ PrefabInstance:
       objectReference: {fileID: 425555107}
     - target: {fileID: 7686996949362408578, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}
       propertyPath: buttonID
-      value: 72
+      value: BM
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76d67aad9dfeabb4c845ead1aaa115f8, type: 3}

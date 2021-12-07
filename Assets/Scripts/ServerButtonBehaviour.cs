@@ -6,7 +6,7 @@ using TMPro;
 public class ServerButtonBehaviour : MonoBehaviour
 {
     [SerializeField]
-    private char buttonID;
+    private string buttonID;
     [SerializeField]
     private NetworkedServer server;
     [SerializeField]
