@@ -20,10 +20,8 @@ public class NetworkedServer : MonoBehaviour
 
     [SerializeField] WatchState watchState;
 
-    public bool winX = false;
-    public bool winO = false;
-    public bool isStalemate = false;
-    bool shouldCheckState = true;
+    public int winResult = 0;
+    bool shouldCheckWinState = true;
     public bool doReplay = false;
 
     bool player1WantsRestart = false;
@@ -42,7 +40,7 @@ public class NetworkedServer : MonoBehaviour
     PlayerAccount Spectator = new PlayerAccount(0);
     PlayerAccount ActivePlayer = new PlayerAccount(0);
 
-    private IEnumerator waitingInReplay = null;
+    private IEnumerator showReplay = null;
 
     // Start is called before the first frame update
     void Start()
@@ -61,8 +59,8 @@ public class NetworkedServer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(shouldCheckState)
-            CheckState();
+        if(shouldCheckWinState)
+            WinState();
         if (doReplay)
         {
             doReplay = false;
@@ -192,25 +190,25 @@ public class NetworkedServer : MonoBehaviour
         }
     }
 
-    private void CheckState()
+    private void WinState()
     {
-        if(winX)
+        if(winResult == 1)
         {
             SendMessageToClient(ServerToClientSignifiers.YouWon + ",You Won! Press R to play again", Player1.playerID);
             SendMessageToClient(ServerToClientSignifiers.YouLost + ",You Lost. press R to play again", Player2.playerID);
-            shouldCheckState = false;
+            shouldCheckWinState = false;
         }
-        else if(winO)
+        else if(winResult == 2)
         {
             SendMessageToClient(ServerToClientSignifiers.YouLost + ",You Lost. press R to play again", Player1.playerID);
             SendMessageToClient(ServerToClientSignifiers.YouWon + ",You Won! Press R to play again", Player2.playerID);
-            shouldCheckState = false;
+            shouldCheckWinState = false;
         }
-        else if(isStalemate)
+        else if(winResult == 3)
         {
             SendMessageToClient(ServerToClientSignifiers.Tie + ",Tie Game. press R to play again", Player1.playerID);
             SendMessageToClient(ServerToClientSignifiers.Tie + ",Tie Game. press R to play again", Player2.playerID);
-            shouldCheckState = false;
+            shouldCheckWinState = false;
         }
     }
 
@@ -223,10 +221,8 @@ public class NetworkedServer : MonoBehaviour
         watchState.WipeState();
 
         // Wipe Variables
-        winX = false;
-        winO = false;
-        isStalemate = false;
-        shouldCheckState = true;
+        winResult = 0;
+        shouldCheckWinState = true;
         player1WantsRestart = false;
         player2WantsRestart = false;
     }
@@ -249,18 +245,18 @@ public class NetworkedServer : MonoBehaviour
         SendMessageToClient(ServerToClientSignifiers.WatchReplay + "", Player1.playerID);
         SendMessageToClient(ServerToClientSignifiers.WatchReplay + "", Player2.playerID);
         SendMessageToClient(ServerToClientSignifiers.WatchReplay + "", Spectator.playerID);
-        waitingInReplay = WaitingInReplay(1.0f);
-        StartCoroutine(waitingInReplay);
+        showReplay = ShowReplay(1.0f);
+        StartCoroutine(showReplay);
     }
 
 
-    IEnumerator WaitingInReplay(float TimeToWait)
+    IEnumerator ShowReplay(float TimeToWait)
     {
         string placedLocation;
-        while (watchState.OOP.Count > 0)
+        while (watchState.OrderOfPlay.Count > 0)
         {
             yield return new WaitForSeconds(TimeToWait);
-            placedLocation = watchState.OOP.Dequeue();
+            placedLocation = watchState.OrderOfPlay.Dequeue();
             if (TurnOdd)
             {
                 inPositionPlaceX(placedLocation);

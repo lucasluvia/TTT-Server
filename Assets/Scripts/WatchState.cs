@@ -8,24 +8,25 @@ public class WatchState : MonoBehaviour
 
     int count = 0;
     bool hasWon = false;
+    int winCheck;
 
     int StateTL = 0; int StateTM = 0; int StateTR = 0; int StateCL = 0; int StateCM = 0; int StateCR = 0; int StateBL = 0; int StateBM = 0; int StateBR = 0; 
    
-    public Queue<string> OOP = new Queue<string>(); // Order Of Play
+    public Queue<string> OrderOfPlay = new Queue<string>(); 
 
     void Update()
     {
-
-        if (CheckForWin() == 1 && !hasWon)
+        winCheck = CheckForWin();
+        if (winCheck == 1 && !hasWon)
         {
             hasWon = true;
-            server.winX = true;
+            server.winResult = 1;
             server.doReplay = true;
         }
-        else if (CheckForWin() == 2 && !hasWon)
+        else if (winCheck == 2 && !hasWon)
         {
             hasWon = true;
-            server.winO = true;
+            server.winResult = 2;
             server.doReplay = true;
         }
         else
@@ -33,7 +34,7 @@ public class WatchState : MonoBehaviour
             if (count == 9 && !hasWon)
             {
                 hasWon = true;
-                server.isStalemate = true;
+                server.winResult = 3;
                 server.Replay();
             }
         }
@@ -61,7 +62,7 @@ public class WatchState : MonoBehaviour
             StateBR = id;
         
         count++;
-        OOP.Enqueue(location);
+        OrderOfPlay.Enqueue(location);
     }
 
     private int CheckForWin()
